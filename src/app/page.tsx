@@ -60,21 +60,21 @@ export default function HomePage() {
       className={cn(
         "min-h-screen transition-colors duration-500 ease-in",
         textColor,
-        isVisible ? "bg-[#141c61]" : "bg-background"
+        isVisible ? "bg-primary" : "bg-background"
       )}
     >
       <div>
         <section
           id="inicio"
           ref={homeRef}
-          className="h-screen pb-16 grid grid-cols-2 items-center sticky top-0 animate-opacity-on-scroll"
+          className="h-screen pb-16 grid grid-cols-2 items-center sticky top-0 bg-linear-[166deg,rgba(247,226,119,0.83)_0%,rgba(255,255,255,0.85)_70%,rgba(36,45,224,1)_100%] animate-opacity-on-scroll"
         >
-          <div className="container mx-auto mb-5 pl-10 text-center max-w-2xl ">
-            <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 text-balance">
+          <div className="container mx-auto mb-5 pl-10  max-w-2xl ">
+            <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 text-balance text-center">
               Aprende a <span className="text-primary">Bailar</span> con{" "}
               <span className="text-accent">Pasión</span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground mb-8 text-justify text-pretty max-w-2xl mx-auto">
               Desde principiantes hasta avanzados, ofrecemos clases de Bachata,
               Salsa y Kizomba con profesores especializados. Aprende técnica,
               ritmo y estilo mientras disfrutas de un ambiente divertido y
@@ -94,11 +94,11 @@ export default function HomePage() {
             {/* <source srcSet="hero-image-1.avif" />
               <source srcSet="hero-image-2.webp" />
               <source srcSet="hero-image-3.jpg" /> */}
-            <img src="hero-image-4.png" />
+            <img src="hero-image.png" />
             {/* </picture> */}
           </div>
         </section>
-        <section className="pb-15 px-4 mtop-20 h-full relative bg-gradient-to-b from-gray-300 to-white">
+        <section className="pb-15 px-4 pt-5 h-full relative bg-gradient-to-b from-gray-300 to-white">
           <div className="container mx-auto">
             <div className=" grid grid-cols-2 gap-5">
               <div className="flex flex-col justify-center items-center  sticky top-1 h-screen">
@@ -109,7 +109,7 @@ export default function HomePage() {
                   <p
                     className={cn(
                       video1IsVisible
-                        ? "transition-transform scale-160 ml-4"
+                        ? "transition-transform scale-150 ml-4"
                         : ""
                     )}
                   >
@@ -122,7 +122,7 @@ export default function HomePage() {
                     className={cn(
                       "my-3",
                       video2IsVisible
-                        ? "transition-transform scale-160 ml-4"
+                        ? "transition-transform scale-150 ml-4"
                         : ""
                     )}
                   >
@@ -132,7 +132,7 @@ export default function HomePage() {
                   <p
                     className={cn(
                       video3IsVisible
-                        ? "transition-transform scale-160 ml-4"
+                        ? "transition-transform scale-150 ml-4"
                         : ""
                     )}
                   >
