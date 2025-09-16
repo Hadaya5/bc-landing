@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,8 +19,14 @@ import {
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { useIntersect, useIntersectElements } from "@/hooks/useIntersect";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const experimental_ppr = true;
+
+const DynamicVideoPlayer = dynamic(() => import("@/components/VideoPlayer"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[560px] w-[320px] rounded-2xl" />,
+});
 
 export default function HomePage() {
   const [textColor, setTextColor] = useState<
@@ -139,49 +146,33 @@ export default function HomePage() {
               <div>
                 <div
                   ref={video1Ref}
-                  className="h-fit z-[60] flex justify-center items-start animate-on-scroll animate-scale-on-scroll"
+                  className="h-fit z-[60] flex justify-center items-start  animate-scale-on-scroll"
                 >
-                  <Suspense fallback={<p>loading...</p>}>
-                    <video
-                      autoPlay
-                      loop
-                      muted
-                      controls
-                      width="320"
-                      src="output.mp4"
-                      className="rounded-2xl"
-                    ></video>
-                  </Suspense>
+                  <DynamicVideoPlayer
+                    width={320}
+                    className="rounded-2xl"
+                    src="/output.mp4"
+                  />
                 </div>
                 <div
                   ref={video2Ref}
-                  className="h-fit my-5 flex justify-center items-center animate-on-scroll animate-scale-on-scroll"
+                  className="h-fit my-5 flex justify-center items-center  animate-scale-on-scroll"
                 >
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    controls
-                    width="320"
-                    src="output.mp4"
+                  <DynamicVideoPlayer
+                    width={320}
                     className="rounded-2xl"
-                  ></video>
+                    src="/output.mp4"
+                  />
                 </div>
                 <div
                   ref={video3Ref}
-                  className="h-fit flex justify-center items-end animate-on-scroll animate-scale-on-scroll"
+                  className="h-fit flex justify-center items-end  animate-scale-on-scroll"
                 >
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    controls
-                    width="320"
-                    src="output.mp4"
+                  <DynamicVideoPlayer
+                    width={320}
                     className="rounded-2xl"
-                  ></video>
+                    src="/output.mp4"
+                  />
                 </div>
               </div>
             </div>
