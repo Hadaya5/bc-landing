@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,8 @@ import {
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { useIntersect, useIntersectElements } from "@/hooks/useIntersect";
+
+export const experimental_ppr = true;
 
 export default function HomePage() {
   const [textColor, setTextColor] = useState<
@@ -137,18 +139,19 @@ export default function HomePage() {
               <div>
                 <div
                   ref={video1Ref}
-                  className="h-fit flex justify-center items-start animate-on-scroll animate-scale-on-scroll"
+                  className="h-fit z-[60] flex justify-center items-start animate-on-scroll animate-scale-on-scroll"
                 >
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    controls
-                    width="320"
-                    src="output.mp4"
-                    className="rounded-2xl"
-                  ></video>
+                  <Suspense fallback={<p>loading...</p>}>
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      controls
+                      width="320"
+                      src="output.mp4"
+                      className="rounded-2xl"
+                    ></video>
+                  </Suspense>
                 </div>
                 <div
                   ref={video2Ref}
