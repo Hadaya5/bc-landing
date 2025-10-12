@@ -8,9 +8,15 @@ export async function middleware(request: NextRequest) {
     },
   });
 
+  // Check if Supabase environment variables are available
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    console.error("Missing Supabase environment variables in middleware");
+    return response;
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -33,10 +39,19 @@ export async function middleware(request: NextRequest) {
 
   // Check if the request is for the admin route (but not login)
   if (request.nextUrl.pathname.startsWith("/admin") && !request.nextUrl.pathname.startsWith("/admin/login")) {
-    const { data: { user } } = await supabase.auth.getUser();
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser();
 
-    // If no user is authenticated, redirect to login
-    if (!user) {
+      // If there's an error or no user is authenticated, redirect to login
+      if (error || !user) {
+        console.log("Auth error or no user:", error?.message || "No user found");
+        const url = request.nextUrl.clone();
+        url.pathname = "/admin/login";
+        return NextResponse.redirect(url);
+      }
+    } catch (error) {
+      console.error("Middleware auth error:", error);
+      // In case of error, redirect to login as a fallback
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
       return NextResponse.redirect(url);

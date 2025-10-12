@@ -6,24 +6,24 @@
 :root {
   /* Updated color tokens for Baila Ciencias brand */
   --background: oklch(1 0 0); /* White */
-  --foreground: oklch(0.2 0.1 264); /* Deep Navy #141c61 */
+  --foreground: oklch(0.24 0.1 264); /* Deep Navy #141c61 */
   --card: oklch(0.98 0 0); /* Light Gray #f8f9fa */
-  --card-foreground: oklch(0.2 0.1 264); /* Deep Navy */
+  --card-foreground: oklch(0.24 0.1 264); /* Deep Navy */
   --popover: oklch(1 0 0); /* White */
-  --popover-foreground: oklch(0.2 0.1 264); /* Deep Navy */
-  --primary: oklch(0.2 0.1 264); /* Deep Navy #141c61 */
+  --popover-foreground: oklch(0.24 0.1 264); /* Deep Navy */
+  --primary: oklch(0.24 0.1 264); /* Deep Navy #141c61 */
   --primary-foreground: oklch(1 0 0); /* White */
   --secondary: oklch(0.75 0.15 85); /* Amber #fbbf24 */
-  --secondary-foreground: oklch(0.2 0.1 264); /* Deep Navy */
+  --secondary-foreground: oklch(0.24 0.1 264); /* Deep Navy */
   --muted: oklch(0.98 0 0); /* Light Gray #f8f9fa */
-  --muted-foreground: oklch(0.2 0.1 264); /* Deep Navy */
+  --muted-foreground: oklch(0.24 0.1 264); /* Deep Navy */
   --accent: oklch(0.75 0.15 85); /* Amber #fbbf24 */
-  --accent-foreground: oklch(0.2 0.1 264); /* Deep Navy */
+  --accent-foreground: oklch(0.24 0.1 264); /* Deep Navy */
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.9 0 0); /* Light border */
   --input: oklch(1 0 0); /* White */
-  --ring: oklch(0.2 0.1 264 / 0.5); /* Semi-transparent Deep Navy */
+  --ring: oklch(0.24 0.1 264 / 0.5); /* Semi-transparent Deep Navy */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -31,14 +31,20 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.5rem;
   --sidebar: oklch(0.98 0 0); /* Light Gray */
-  --sidebar-foreground: oklch(0.2 0.1 264); /* Deep Navy */
+  --sidebar-foreground: oklch(0.24 0.1 264); /* Deep Navy */
   --sidebar-primary: oklch(1 0 0); /* White */
-  --sidebar-primary-foreground: oklch(0.2 0.1 264); /* Deep Navy */
+  --sidebar-primary-foreground: oklch(0.24 0.1 264); /* Deep Navy */
   --sidebar-accent: oklch(0.75 0.15 85); /* Amber */
-  --sidebar-accent-foreground: oklch(0.2 0.1 264); /* Deep Navy */
+  --sidebar-accent-foreground: oklch(0.24 0.1 264); /* Deep Navy */
   --sidebar-border: oklch(0.9 0 0); /* Light border */
-  --sidebar-ring: oklch(0.2 0.1 264 / 0.5); /* Semi-transparent Deep Navy */
+  --sidebar-ring: oklch(0.24 0.1 264 / 0.5); /* Semi-transparent Deep Navy */
 }
+
+.bg-custom-gradient {
+
+ background: linear-gradient(166deg, rgba(247, 226, 119, 0.83) 0%, rgba(255, 255, 255, 0.85) 70%, rgba(36, 45, 224, 1) 100%);
+}
+
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -189,19 +195,21 @@
   transform: scale(1.2);
 }
 
-@keyframes growScale {
+@keyframes growScaleFadeIn {
   from {
-    transform: scale(0.8);
+    opacity: 0;
+    transform: scale(0.65);
   }
   to {
-    transform: scale(1);
+    opacity: 1;
+    transform: scale(0.95);
   }
 }
 
 .animate-scale-on-scroll {
-  animation: growScale  0.8s linear forwards;
+  animation: growScaleFadeIn  0.8s linear forwards;
   animation-timeline: view();
-  animation-range: entry -10% cover 60%;
+  animation-range: entry -50% cover 45%;
 }
 
 @keyframes fade-out {
@@ -211,14 +219,14 @@
   }
   to {
     opacity: 0;
-    transform: scale(0.75);
+    transform: scale(0.7);
   }
 }
 
 .animate-opacity-on-scroll {
   animation: fade-out 0.8s linear forwards;
   animation-timeline: view();
-  animation-range: cover 25% exit 90%;
+  animation-range: cover 20% exit 90%;
 }
 
 @keyframes changeBackground {
@@ -228,13 +236,9 @@
   }
   to {
     background-color: "#141c61";
-
   }
 }
 
-
-
 .animate-background-color {
   animation: changeBackground 0.8s ease-out forwards;
-
 }

@@ -1,11 +1,9 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Music,
   Users,
@@ -20,6 +18,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { useIntersect, useIntersectElements } from "@/hooks/useIntersect";
 import { Skeleton } from "@/components/ui/skeleton";
+import VideoPlayer from "@/components/VideoPlayer";
 
 export const experimental_ppr = true;
 
@@ -34,16 +33,18 @@ export default function HomePage() {
   >("text-foreground");
 
   //Observer hook for background setting
-  const { intersectionRef: testimoniesRef, isVisible } = useIntersect(
-    0.3,
-    (isIntersecting) => {
-      setTextColor(isIntersecting ? "text-secondary" : "text-foreground");
-    }
-  );
+  const {
+    intersectionRef: featuresRef,
+    isVisible: isTestimoniesSectionVisible,
+  } = useIntersect(0.2, (isIntersecting) => {
+    setTextColor(isIntersecting ? "text-secondary" : "text-foreground");
+  });
 
   //Observer hook for home section
-  const { intersectionRef: homeRef, isVisible: isHomeVisible } =
-    useIntersect(0.3);
+  const {
+    intersectionRef: discoverSectionTef,
+    isVisible: isDiscoverSectionVisible,
+  } = useIntersect(0.01);
 
   //Observer videos hook
   const { intersectionRef: video1Ref, isVisible: video1IsVisible } =
@@ -60,16 +61,18 @@ export default function HomePage() {
       className={cn(
         "min-h-screen transition-colors duration-500 ease-in",
         textColor,
-        isVisible ? "bg-primary" : "bg-background"
+        isTestimoniesSectionVisible ? "bg-primary" : "bg-background"
       )}
     >
       <div>
         <section
           id="inicio"
-          ref={homeRef}
-          className="h-screen pb-16 grid grid-cols-2 items-center sticky top-0 bg-linear-[166deg,rgba(247,226,119,0.83)_0%,rgba(255,255,255,0.85)_70%,rgba(36,45,224,1)_100%] animate-opacity-on-scroll"
+          className={cn(
+            "h-screen pb-16 grid lg:grid-cols-2 items-center sticky top-0 bg-custom-gradient",
+            isDiscoverSectionVisible && "animate-opacity-on-scroll"
+          )}
         >
-          <div className="container mx-auto mb-5 pl-10  max-w-2xl ">
+          <div className="container mx-auto mb-5 px-10 md:pr-0 max-w-2xl mt-20 lg:mt-0">
             <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 text-balance text-center">
               Aprende a <span className="text-primary">Bailar</span> con{" "}
               <span className="text-accent">Pasión</span>
@@ -89,18 +92,19 @@ export default function HomePage() {
               </Button>
             </div>
           </div>
-          <div className="h-screen mt-15 flex ml-10">
-            {/* <picture> */}
-            {/* <source srcSet="hero-image-1.avif" />
-              <source srcSet="hero-image-2.webp" />
-              <source srcSet="hero-image-3.jpg" /> */}
+          <div className="h-screen mt-15 ml-10 hidden lg:flex ">
             <img src="hero-image.png" />
-            {/* </picture> */}
           </div>
         </section>
-        <section className="pb-15 px-4 pt-5 h-full relative bg-gradient-to-b from-gray-300 to-white">
+        <section
+          ref={discoverSectionTef}
+          className={cn(
+            "pb-5 md:pb-15 px-4 pt-5 h-full relative  bg-gray-300  transition-colors duration-500 ease-in",
+            isTestimoniesSectionVisible && "bg-primary"
+          )}
+        >
           <div className="container mx-auto">
-            <div className=" grid grid-cols-2 gap-5">
+            <div className="grid md:grid-cols-2 gap-5">
               <div className="flex flex-col justify-center items-center  sticky top-1 h-screen">
                 <h2 className="text-4xl font-bold text-center">
                   Descubre el arte del baile con nuestros cursos de
@@ -108,9 +112,7 @@ export default function HomePage() {
                 <div className="mt-10 text-xl text-center">
                   <p
                     className={cn(
-                      video1IsVisible
-                        ? "transition-transform scale-150 ml-4"
-                        : ""
+                      video1IsVisible && "transition-transform scale-150 ml-4"
                     )}
                   >
                     <span className="text-secondary font-semibold">
@@ -121,9 +123,7 @@ export default function HomePage() {
                   <p
                     className={cn(
                       "my-3",
-                      video2IsVisible
-                        ? "transition-transform scale-150 ml-4"
-                        : ""
+                      video2IsVisible && "transition-transform scale-150 ml-4"
                     )}
                   >
                     <span className="text-secondary font-semibold">Salsa</span>,
@@ -131,9 +131,7 @@ export default function HomePage() {
                   </p>
                   <p
                     className={cn(
-                      video3IsVisible
-                        ? "transition-transform scale-150 ml-4"
-                        : ""
+                      video3IsVisible && "transition-transform scale-150 ml-4"
                     )}
                   >
                     <span className="text-secondary font-semibold">
@@ -142,8 +140,15 @@ export default function HomePage() {
                     , conexión y flow
                   </p>
                 </div>
+                <div className="md:hidden h-fit z-[60] pt-5 flex justify-center items-start animate-scale-on-scroll">
+                  <VideoPlayer
+                    width={200}
+                    className="rounded-2xl"
+                    src="/bachataVideo.mp4"
+                  />
+                </div>
               </div>
-              <div>
+              <div className="hidden md:block">
                 <div
                   ref={video1Ref}
                   className="h-fit z-[60] flex justify-center items-start  animate-scale-on-scroll"
@@ -151,7 +156,7 @@ export default function HomePage() {
                   <DynamicVideoPlayer
                     width={320}
                     className="rounded-2xl"
-                    src="/output.mp4"
+                    src="/bachataVideo.mp4"
                   />
                 </div>
                 <div
@@ -161,7 +166,7 @@ export default function HomePage() {
                   <DynamicVideoPlayer
                     width={320}
                     className="rounded-2xl"
-                    src="/output.mp4"
+                    src="/bachataVideo.mp4"
                   />
                 </div>
                 <div
@@ -171,28 +176,20 @@ export default function HomePage() {
                   <DynamicVideoPlayer
                     width={320}
                     className="rounded-2xl"
-                    src="/output.mp4"
+                    src="/bachataVideo.mp4"
                   />
                 </div>
               </div>
             </div>
-            {/* <div className="w-full h-64 md:h-80 bg-muted rounded-2xl flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Music className="w-10 h-10 text-primary" />
-                </div>
-                <p className="text-muted-foreground">Video de presentación</p>
-              </div>
-            </div> */}
           </div>
         </section>
       </div>
 
       {/* Features Section */}
-      <div ref={testimoniesRef}>
+      <div ref={featuresRef}>
         <section
           id="caracteristicas"
-          className="py-16 px-4 transition-colors duration-200 ease-in"
+          className="py-16 px-4 z-50 transition-colors duration-200 ease-in"
         >
           <div className="container mx-auto">
             <div className="text-center mb-12 animate-on-scroll">
@@ -322,8 +319,8 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <Card className="animate-on-scroll bg-card border-border">
+            <div className="flex flex-wrap justify-center gap-8">
+              <Card className="animate-on-scroll bg-card border-border md:w-[40%] lg:w-[30%]">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
@@ -353,7 +350,7 @@ export default function HomePage() {
                 </CardContent>
               </Card>
 
-              <Card className="animate-on-scroll bg-card border-border">
+              <Card className="animate-on-scroll bg-card border-border md:w-[40%] lg:w-[30%]">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mr-4">
@@ -383,7 +380,7 @@ export default function HomePage() {
                 </CardContent>
               </Card>
 
-              <Card className="animate-on-scroll bg-card border-border">
+              <Card className="animate-on-scroll bg-card border-border md:w-[40%] lg:w-[30%]">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
@@ -421,14 +418,16 @@ export default function HomePage() {
       <section
         id="contacto"
         className={cn(
-          "py-16 px-4 ",
-          isVisible ? "text-secondary" : "text-muted-foreground"
+          "py-16 px-4",
+          isTestimoniesSectionVisible
+            ? "text-secondary"
+            : "text-muted-foreground"
         )}
       >
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12 animate-on-scroll">
-            <h2 className="text-4xl font-bold  mb-4">
-              ¿Listo para comenzar a bailar?
+            <h2 className="relative top-3 text-4xl font-bold mb-4">
+              ¿List@ para comenzar a bailar?
             </h2>
             <p className="text-xltext-pretty">
               Contáctanos para más información sobre nuestros cursos y horarios
@@ -437,65 +436,43 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-12">
-            <div className="animate-on-scroll">
-              <h3 className="text-2xl font-semibold  mb-6">
+            <div className="animate-on-scroll text-center md:text-left">
+              <h3 className="text-2xl font-semibold mb-6">
                 Información de Contacto
               </h3>
               <div className="space-y-4">
                 <div className="flex items-center">
-                  <Mail className="w-5 h-5  mr-3" />
+                  <Mail className="w-5 h-5 mr-3 text-secondary" />
                   <span>info@bailaciencias.com</span>
                 </div>
                 <div className="flex items-center">
-                  <MessageCircle className="w-5 h-5  mr-3" />
-                  <span>+1 (555) 123-4567</span>
+                  <MessageCircle className="w-5 h-5 mr-3 text-secondary" />
+                  <span>+58 (424) 123-4567</span>
                 </div>
                 <div className="flex items-center">
-                  <Instagram className="w-5 h-5  mr-3" />
-                  <span>@bailaciencias</span>
+                  <Instagram className="w-5 h-5 mr-3 text-secondary" />@
+                  <a
+                    href="https://www.instagram.com/bailaciencias/?igsh=ZjY5ajJ6cXdlY3Nz#"
+                    className="underline "
+                  >
+                    bailaciencias
+                  </a>
                 </div>
                 <div className="flex items-center">
-                  <MapPin className="w-5 h-5  mr-3" />
-                  <span>Ciudad de México, México</span>
+                  <MapPin className="w-5 h-5 mr-3 text-secondary" />
+                  <span>
+                    UCV, Paseo Los Ilustres, Caracas 1040, Distrito Capital
+                  </span>
                 </div>
               </div>
             </div>
-
-            <Card className="animate-on-scroll bg-card border-border">
-              <CardContent className="p-6">
-                <form className="space-y-4">
-                  <div>
-                    <Input
-                      placeholder="Nombre completo"
-                      className="bg-input border-border "
-                    />
-                  </div>
-                  <div>
-                    <Input
-                      type="email"
-                      placeholder="Correo electrónico"
-                      className="bg-input border-border "
-                    />
-                  </div>
-                  <div>
-                    <Input
-                      placeholder="Institución educativa"
-                      className="bg-input border-border "
-                    />
-                  </div>
-                  <div>
-                    <Textarea
-                      placeholder="Cuéntanos sobre tu proyecto..."
-                      rows={4}
-                      className="bg-input border-border "
-                    />
-                  </div>
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                    Enviar Mensaje
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+            <div className="flex justify-center">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1147.7002013987344!2d-66.89352461613655!3d10.486030021729867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c2a58d07bc0a8bd%3A0xfc52a7184f332e86!2sUCV%20Facultad%20de%20Ciencias!5e0!3m2!1ses!2sve!4v1760228991472!5m2!1ses!2sve"
+                className="rounded-xl h-72 w-11/12 md:w-96"
+                loading="lazy"
+              ></iframe>
+            </div>
           </div>
         </div>
       </section>

@@ -5,23 +5,24 @@ import { ArrowLeft, Music } from "lucide-react";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePathname } from "next/navigation";
+import { Logo } from "../Logo";
 
 export function Navbar() {
   const { user, signOut } = useAuth();
   const currentPathname = usePathname();
-  console.log(currentPathname);
 
   if (user && currentPathname.startsWith("/admin")) {
     return (
       <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-sm border-b border-border z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+            {/* <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
               <Music className="w-6 h-6 text-primary-foreground" />
             </div>
             <span className="text-xl font-bold text-foreground">
               Baila Ciencias - Admin
-            </span>
+            </span> */}
+            <img src="logo.png" alt="Logo de baila ciencias" />
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-sm text-muted-foreground">{user?.email}</span>
@@ -45,18 +46,11 @@ export function Navbar() {
   } else {
     return (
       <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-sm border-b border-border z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <Music className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold text-foreground">
-              Baila Ciencias
-            </span>
-          </div>
-          <div className="hidden md:flex space-x-8">
+        <div className="container mx-auto px-4 py-4 flex items-center relative">
+          <Logo />
+          <div className="flex mx-auto space-x-8">
             <a
-              href="#inicio"
+              href="/"
               className="text-foreground hover:text-primary transition-colors"
             >
               Inicio
@@ -68,27 +62,12 @@ export function Navbar() {
               Cursos
             </a>
             <a
-              href="#caracteristicas"
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Características
-            </a>
-            <a
-              href="#testimonios"
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Testimonios
-            </a>
-            <a
               href="#contacto"
               className="text-foreground hover:text-primary transition-colors"
             >
               Contacto
             </a>
           </div>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            Comenzar
-          </Button>
         </div>
       </nav>
     );
