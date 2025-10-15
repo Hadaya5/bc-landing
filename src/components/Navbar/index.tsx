@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Music } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { redirect, usePathname } from "next/navigation";
@@ -17,7 +17,6 @@ export function Navbar() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Logo />
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-muted-foreground">{user?.email}</span>
             <Link
               href="/"
               className="flex items-center text-muted-foreground hover:text-primary transition-colors"
@@ -43,7 +42,7 @@ export function Navbar() {
       <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-sm border-b border-border z-50">
         <div className="container mx-auto px-4 py-4 flex items-center relative">
           <Logo />
-          <div className="flex justify-center w-[calc(100%-180px)] space-x-8">
+          <div className="flex justify-end sm:justify-center w-full sm:w-[calc(100%-140px)] space-x-3 sm:space-x-8">
             <Link
               href="/"
               className="text-foreground hover:text-primary transition-colors"

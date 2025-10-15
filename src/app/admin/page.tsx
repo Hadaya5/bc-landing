@@ -35,6 +35,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import Loading from "@/components/Loading";
 
 interface Curso {
   id?: string;
@@ -246,18 +247,7 @@ export default function AdminPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <Music className="w-8 h-8 text-primary-foreground" />
-          </div>
-          <p className="text-muted-foreground">
-            Cargando panel administrativo...
-          </p>
-        </div>
-      </div>
-    );
+    return <Loading message="Cargando panel administrativo..." />;
   }
 
   return (

@@ -73,7 +73,7 @@ export default function HomePage() {
               </Button>
             </div>
           </div>
-          <div className="h-screen mt-15 ml-10 hidden lg:flex ">
+          <div className="h-screen mt-15 ml-15 hidden lg:flex">
             <img src="hero-image.png" />
           </div>
         </section>
@@ -86,7 +86,7 @@ export default function HomePage() {
         >
           <div className="container mx-auto">
             <div className="grid md:grid-cols-2 gap-5">
-              <div className="flex flex-col justify-center items-center  sticky top-1 h-screen">
+              <div className="flex flex-col justify-center items-center sticky top-1 h-screen">
                 <h2 className="text-4xl font-bold text-center">
                   Descubre el arte del baile con nuestros cursos de
                 </h2>
