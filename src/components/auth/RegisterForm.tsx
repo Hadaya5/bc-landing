@@ -10,13 +10,9 @@ import { Music, Eye, EyeOff } from "lucide-react";
 
 interface RegisterFormProps {
   onSuccess: () => void;
-  onSwitchToLogin: () => void;
 }
 
-export default function RegisterForm({
-  onSuccess,
-  onSwitchToLogin,
-}: RegisterFormProps) {
+export default function RegisterForm({ onSuccess }: RegisterFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -74,9 +70,11 @@ export default function RegisterForm({
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Music className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">¡Registro exitoso!</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              ¡Usuario creado exitosamente!
+            </h3>
             <p className="text-muted-foreground mb-4">
-              Tu cuenta ha sido creada. Redirigiendo al panel administrativo...
+              El nuevo administrador ha sido registrado. Redirigiendo...
             </p>
           </div>
         </CardContent>
@@ -90,9 +88,9 @@ export default function RegisterForm({
         <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
           <Music className="w-8 h-8 text-primary-foreground" />
         </div>
-        <CardTitle className="text-2xl">Crear Cuenta</CardTitle>
+        <CardTitle className="text-2xl">Crear Usuario Administrador</CardTitle>
         <p className="text-muted-foreground">
-          Regístrate para acceder al panel administrativo
+          Registrar nuevo administrador para el panel de Baila Ciencias
         </p>
       </CardHeader>
       <CardContent>
@@ -177,19 +175,6 @@ export default function RegisterForm({
             {loading ? "Creando cuenta..." : "Crear Cuenta"}
           </Button>
         </form>
-
-        <div className="mt-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            ¿Ya tienes una cuenta?{" "}
-            <Button
-              variant="link"
-              className="p-0 h-auto text-primary"
-              onClick={onSwitchToLogin}
-            >
-              Inicia sesión aquí
-            </Button>
-          </p>
-        </div>
       </CardContent>
     </Card>
   );

@@ -10,13 +10,9 @@ import { Music, Eye, EyeOff } from "lucide-react";
 
 interface LoginFormProps {
   onSuccess: () => void;
-  onSwitchToRegister: () => void;
 }
 
-export default function LoginForm({
-  onSuccess,
-  onSwitchToRegister,
-}: LoginFormProps) {
+export default function LoginForm({ onSuccess }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -67,9 +63,8 @@ export default function LoginForm({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="john@doe.com"
+              placeholder="Ingrese su correo electrónico"
               required
-              className="bg-background mt-1"
             />
           </div>
 
@@ -81,9 +76,8 @@ export default function LoginForm({
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="******"
+                placeholder="Ingrese su contraseña"
                 required
-                className="bg-background mt-1"
               />
               <Button
                 type="button"
@@ -115,19 +109,6 @@ export default function LoginForm({
             {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </Button>
         </form>
-
-        <div className="mt-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            ¿No tienes una cuenta?{" "}
-            <Button
-              variant="link"
-              className="p-0 h-auto text-primary"
-              onClick={onSwitchToRegister}
-            >
-              Regístrate aquí
-            </Button>
-          </p>
-        </div>
       </CardContent>
     </Card>
   );

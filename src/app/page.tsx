@@ -206,7 +206,7 @@ export default function HomePage() {
         <section className="py-16 px-4 transition-colors duration-300 ease-in bg-muted/5">
           <div className="container mx-auto">
             <div className="text-center mb-12 animate-on-scroll">
-              <h2 className={cn("text-4xl font-bold mb-4r", textColor)}>
+              <h2 className={cn("text-4xl font-bold mb-4", textColor)}>
                 Lo que dicen nuestros estudiantes
               </h2>
               <p

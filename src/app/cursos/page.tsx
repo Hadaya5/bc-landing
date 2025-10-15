@@ -79,7 +79,7 @@ export default function CursosPage() {
   };
 
   if (loading) {
-    return <Loading />;
+    return <Loading message="Cargando cursos..." />;
   }
 
   return (

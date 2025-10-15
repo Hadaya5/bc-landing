@@ -32,7 +32,7 @@ import {
   Star,
   Save,
   X,
-  ArrowLeft,
+  UserPlus,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -63,7 +63,6 @@ const niveles: ("Principiante" | "Intermedio" | "Avanzado")[] = [
 ];
 
 export default function AdminPage() {
-  const observerRef = useRef<IntersectionObserver | null>(null);
   const [cursos, setCursos] = useState<Curso[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -101,7 +100,6 @@ export default function AdminPage() {
 
   const createCourse = async (courseData: Omit<Curso, "id">) => {
     try {
-      console.log(courseData);
       const supabase = createClient();
       const { data, error } = await supabase
         .from("courses")
@@ -172,26 +170,6 @@ export default function AdminPage() {
 
   useEffect(() => {
     fetchCursos();
-
-    // observerRef.current = new IntersectionObserver(
-    //   (entries) => {
-    //     entries.forEach((entry) => {
-    //       if (entry.isIntersecting) {
-    //         entry.target.classList.add("visible");
-    //       }
-    //     });
-    //   },
-    //   { threshold: 0.1 }
-    // );
-
-    // const elements = document.querySelectorAll(".");
-    // elements.forEach((el) => observerRef.current?.observe(el));
-
-    // return () => {
-    //   if (observerRef.current) {
-    //     observerRef.current.disconnect();
-    //   }
-    // };
   }, []);
 
   const handleInputChange = (field: keyof Curso, value: string | number) => {
@@ -298,13 +276,23 @@ export default function AdminPage() {
                 Gestiona los cursos de baile de Baila Ciencias
               </p>
             </div>
-            <Button
-              onClick={handleNewCourse}
-              className="mt-4 md:mt-0 bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Nuevo Curso
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2 mt-4 md:mt-0">
+              <Button
+                onClick={handleNewCourse}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Nuevo Curso
+              </Button>
+              <Button
+                onClick={() => (window.location.href = "/admin/usuarios")}
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              >
+                <UserPlus className="w-4 h-4 mr-2" />
+                Registrar Usuario
+              </Button>
+            </div>
           </div>
         </div>
       </section>
