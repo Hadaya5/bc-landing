@@ -1,31 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Music,
-  Users,
-  BookOpen,
-  Star,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Instagram,
-} from "lucide-react";
+import { Mail, MapPin, MessageCircle, Instagram } from "lucide-react";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { useIntersect, useIntersectElements } from "@/hooks/useIntersect";
-import { Skeleton } from "@/components/ui/skeleton";
-import VideoPlayer from "@/components/VideoPlayer";
-
-export const experimental_ppr = true;
-
-const DynamicVideoPlayer = dynamic(() => import("@/components/VideoPlayer"), {
-  ssr: false,
-  loading: () => <Skeleton className="h-[560px] w-[320px] rounded-2xl" />,
-});
+import { VideoPlayer, FeatureCard, TestimonialCard } from "@/components";
+import { featuresData, testimonialsData } from "@/data/rootPageData";
 
 export default function HomePage() {
   const [textColor, setTextColor] = useState<
@@ -74,8 +56,7 @@ export default function HomePage() {
         >
           <div className="container mx-auto mb-5 px-10 md:pr-0 max-w-2xl mt-20 lg:mt-0">
             <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 text-balance text-center">
-              Aprende a <span className="text-primary">Bailar</span> con{" "}
-              <span className="text-accent">Pasión</span>
+              Aprende a Bailar con <span className="text-accent">Pasión</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 text-justify text-pretty max-w-2xl mx-auto">
               Desde principiantes hasta avanzados, ofrecemos clases de Bachata,
@@ -151,9 +132,9 @@ export default function HomePage() {
               <div className="hidden md:block">
                 <div
                   ref={video1Ref}
-                  className="h-fit z-[60] flex justify-center items-start  animate-scale-on-scroll"
+                  className="h-fit z-[60] flex justify-center items-start animate-scale-on-scroll"
                 >
-                  <DynamicVideoPlayer
+                  <VideoPlayer
                     width={320}
                     className="rounded-2xl"
                     src="/bachataVideo.mp4"
@@ -161,9 +142,9 @@ export default function HomePage() {
                 </div>
                 <div
                   ref={video2Ref}
-                  className="h-fit my-5 flex justify-center items-center  animate-scale-on-scroll"
+                  className="h-fit my-5 flex justify-center items-center animate-scale-on-scroll"
                 >
-                  <DynamicVideoPlayer
+                  <VideoPlayer
                     width={320}
                     className="rounded-2xl"
                     src="/bachataVideo.mp4"
@@ -171,9 +152,9 @@ export default function HomePage() {
                 </div>
                 <div
                   ref={video3Ref}
-                  className="h-fit flex justify-center items-end  animate-scale-on-scroll"
+                  className="h-fit flex justify-center items-end animate-scale-on-scroll"
                 >
-                  <DynamicVideoPlayer
+                  <VideoPlayer
                     width={320}
                     className="rounded-2xl"
                     src="/bachataVideo.mp4"
@@ -208,95 +189,15 @@ export default function HomePage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <Card className="animate-on-scroll bg-card border-border hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Music className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-card-foreground mb-3">
-                    Instructores Profesionales
-                  </h3>
-                  <p className="text-muted-foreground text-pretty">
-                    Aprende con bailarines profesionales con años de experiencia
-                    en diferentes estilos de baile.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="animate-on-scroll bg-card border-border hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="w-8 h-8 text-accent" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-card-foreground mb-3">
-                    Clases Grupales
-                  </h3>
-                  <p className="text-muted-foreground text-pretty">
-                    Disfruta del ambiente grupal y conoce personas con tu misma
-                    pasión por el baile.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="animate-on-scroll bg-card border-border hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <BookOpen className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-card-foreground mb-3">
-                    Múltiples Estilos
-                  </h3>
-                  <p className="text-muted-foreground text-pretty">
-                    Desde salsa y bachata hasta hip-hop y danza contemporánea.
-                    Encuentra tu estilo favorito.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="animate-on-scroll bg-card border-border hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Star className="w-8 h-8 text-accent" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-card-foreground mb-3">
-                    Todos los Niveles
-                  </h3>
-                  <p className="text-muted-foreground text-pretty">
-                    Cursos diseñados para principiantes, intermedios y
-                    avanzados. Progresa a tu propio ritmo.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="animate-on-scroll bg-card border-border hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Music className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-card-foreground mb-3">
-                    Horarios Flexibles
-                  </h3>
-                  <p className="text-muted-foreground text-pretty">
-                    Clases en diferentes horarios para que puedas encontrar el
-                    que mejor se adapte a tu rutina.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="animate-on-scroll bg-card border-border hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="w-8 h-8 text-accent" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-card-foreground mb-3">
-                    Ambiente Divertido
-                  </h3>
-                  <p className="text-muted-foreground text-pretty">
-                    Un espacio seguro y divertido donde puedes expresarte
-                    libremente y disfrutar del baile.
-                  </p>
-                </CardContent>
-              </Card>
+              {featuresData.map((feature, index) => (
+                <FeatureCard
+                  key={index}
+                  icon={feature.icon}
+                  title={feature.title}
+                  description={feature.description}
+                  iconColor={feature.iconColor}
+                />
+              ))}
             </div>
           </div>
         </section>
@@ -320,95 +221,16 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-wrap justify-center gap-8">
-              <Card className="animate-on-scroll bg-card border-border md:w-[40%] lg:w-[30%]">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
-                      <span className="text-primary font-semibold">MG</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-card-foreground">
-                        María González
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        Estudiante de Salsa
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-muted-foreground text-pretty">
-                    "Nunca pensé que podría bailar salsa tan bien. Los
-                    instructores son increíbles y el ambiente es muy acogedor."
-                  </p>
-                  <div className="flex mt-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 fill-accent text-accent"
-                      />
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="animate-on-scroll bg-card border-border md:w-[40%] lg:w-[30%]">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mr-4">
-                      <span className="text-accent font-semibold">CR</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-card-foreground">
-                        Carlos Rodríguez
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        Estudiante de Hip-Hop
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-muted-foreground text-pretty">
-                    "Las clases de hip-hop son geniales. He mejorado mucho mi
-                    técnica y he hecho grandes amigos aquí."
-                  </p>
-                  <div className="flex mt-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 fill-accent text-accent"
-                      />
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="animate-on-scroll bg-card border-border md:w-[40%] lg:w-[30%]">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
-                      <span className="text-primary font-semibold">AL</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-card-foreground">
-                        Ana López
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        Estudiante de Bachata
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-muted-foreground text-pretty">
-                    "Baila Ciencias me ayudó a ganar confianza en mí misma.
-                    Ahora bailo bachata con mucha seguridad."
-                  </p>
-                  <div className="flex mt-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 fill-accent text-accent"
-                      />
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              {testimonialsData.map((testimonial, index) => (
+                <TestimonialCard
+                  key={index}
+                  name={testimonial.name}
+                  role={testimonial.role}
+                  testimonial={testimonial.testimonial}
+                  initials={testimonial.initials}
+                  rating={testimonial.rating}
+                />
+              ))}
             </div>
           </div>
         </section>

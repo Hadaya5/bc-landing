@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Music, Clock, Users, Star, Filter, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import Loading from "@/components/Loading";
 
 interface Curso {
   id: string;
@@ -22,19 +23,10 @@ interface Curso {
   updated_at?: string;
 }
 
-const categorias = [
-  "Todos",
-  "Salsa",
-  "Bachata",
-  "Hip-Hop",
-  "Contemporáneo",
-  "Reggaeton",
-  "Tango",
-];
+const categorias = ["Todos", "Salsa", "Bachata", "Kizomba"];
 const niveles = ["Todos", "Principiante", "Intermedio", "Avanzado"];
 
 export default function CursosPage() {
-  const observerRef = useRef<IntersectionObserver | null>(null);
   const [filtroCategoria, setFiltroCategoria] = useState("Todos");
   const [filtroNivel, setFiltroNivel] = useState("Todos");
   const [cursos, setCursos] = useState<Curso[]>([]);
@@ -87,46 +79,28 @@ export default function CursosPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <Music className="w-8 h-8 text-primary-foreground" />
-          </div>
-          <p className="text-muted-foreground">Cargando cursos...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header Section */}
-      <section className="pt-20 pb-8 px-4">
+      <section className="py-4 px-4">
         <div className="container mx-auto">
-          <div className="flex items-center mb-6">
-            <Link
-              href="/"
-              className="flex items-center text-muted-foreground hover:text-primary transition-colors mr-4"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Volver al inicio
-            </Link>
-          </div>
-          <div className="text-center max-w-3xl mx-auto my-[20vh]">
+          <div className="text-center max-w-3xl mx-auto mt-24 mb-10">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 text-balance">
               Nuestros <span className="text-primary">Cursos</span> de Baile
             </h1>
             <p className="text-xl text-muted-foreground text-pretty">
               Descubre la variedad de estilos de baile que ofrecemos. Desde
-              principiantes hasta avanzados, tenemos el curso perfecto para ti.
+              principiantes hasta avanzados.
             </p>
           </div>
         </div>
       </section>
 
       {/* Filters Section */}
-      <section className="pb-8 px-4 ">
+      <section className="pb-8 px-4">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
             <div className="flex items-center gap-2">
@@ -186,7 +160,7 @@ export default function CursosPage() {
             {cursosFiltrados.map((curso, index) => (
               <Card
                 key={curso.id}
-                className=" bg-card border-border hover:shadow-lg transition-all duration-300 group animate-course"
+                className=" bg-card border-border hover:shadow-lg transition-all duration-300"
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">

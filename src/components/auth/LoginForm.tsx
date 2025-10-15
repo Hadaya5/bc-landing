@@ -67,8 +67,9 @@ export default function LoginForm({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@bailaciencias.com"
+              placeholder="john@doe.com"
               required
+              className="bg-background mt-1"
             />
           </div>
 
@@ -80,8 +81,9 @@ export default function LoginForm({
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="******"
                 required
+                className="bg-background mt-1"
               />
               <Button
                 type="button"

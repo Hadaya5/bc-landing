@@ -1,5 +1,3 @@
-import { Music } from "lucide-react";
-import React from "react";
 import { Logo } from "../Logo";
 
 export function Footer() {
@@ -11,8 +9,7 @@ export function Footer() {
           <Logo />
         </div>
         <p className="text-muted-foreground mt-1">
-          © {currentDate.getFullYear()} Baila Ciencias. Transformando la
-          educación a través del movimiento y la creatividad.
+          © {currentDate.getFullYear()} Baila Ciencias.
         </p>
       </div>
     </footer>

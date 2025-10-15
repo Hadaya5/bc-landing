@@ -1,12 +1,8 @@
-"use client";
-
-import React from "react";
-
 type VideoPlayerProps = React.VideoHTMLAttributes<HTMLVideoElement> & {
   src: string;
 };
 
-export default function VideoPlayer({ src, ...rest }: VideoPlayerProps) {
+export function VideoPlayer({ src, ...rest }: VideoPlayerProps) {
   return (
     <video
       autoPlay

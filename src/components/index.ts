@@ -1,3 +1,7 @@
 export * from "./Navbar"
 export * from "./Footer"
 export * from "./Logo"
+export * from "./Loading"
+export * from "./VideoPlayer"
+export * from "./FeatureCard"
+export * from "./TestimonialCard"

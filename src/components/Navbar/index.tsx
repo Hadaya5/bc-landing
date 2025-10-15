@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Music } from "lucide-react";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { Logo } from "../Logo";
 
 export function Navbar() {
@@ -15,15 +15,7 @@ export function Navbar() {
     return (
       <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-sm border-b border-border z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            {/* <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <Music className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold text-foreground">
-              Baila Ciencias - Admin
-            </span> */}
-            <img src="logo.png" alt="Logo de baila ciencias" />
-          </div>
+          <Logo />
           <div className="flex items-center space-x-4">
             <span className="text-sm text-muted-foreground">{user?.email}</span>
             <Link
@@ -34,7 +26,10 @@ export function Navbar() {
               Volver al sitio
             </Link>
             <Button
-              onClick={signOut}
+              onClick={() => {
+                signOut();
+                redirect("/");
+              }}
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               Cerrar Sesión
@@ -48,25 +43,25 @@ export function Navbar() {
       <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-sm border-b border-border z-50">
         <div className="container mx-auto px-4 py-4 flex items-center relative">
           <Logo />
-          <div className="flex mx-auto space-x-8">
-            <a
+          <div className="flex justify-center w-[calc(100%-180px)] space-x-8">
+            <Link
               href="/"
               className="text-foreground hover:text-primary transition-colors"
             >
               Inicio
-            </a>
-            <a
+            </Link>
+            <Link
               href="/cursos"
               className="text-foreground hover:text-primary transition-colors"
             >
               Cursos
-            </a>
-            <a
-              href="#contacto"
+            </Link>
+            <Link
+              href="/#contacto"
               className="text-foreground hover:text-primary transition-colors"
             >
               Contacto
-            </a>
+            </Link>
           </div>
         </div>
       </nav>

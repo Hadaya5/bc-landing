@@ -32,7 +32,7 @@ export default function AdminLoginPage() {
     );
   }
 
-  // Don't render login form if user is authenticated
+  // Don't show login form if user is authenticated
   if (user) {
     return null;
   }
