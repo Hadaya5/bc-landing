@@ -1,8 +1,6 @@
 "use client";
 
-import type React from "react";
-
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -29,46 +27,32 @@ import {
   Trash2,
   Users,
   Clock,
-  Star,
   Save,
   X,
   UserPlus,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import Loading from "@/components/Loading";
+import {
+  Course,
+  createCourse,
+  deleteCourse,
+  fetchCourses,
+  updateCourse,
+} from "@/lib/courses";
 
-interface Curso {
-  id?: string;
-  title: string;
-  instructor: string;
-  level: "Principiante" | "Intermedio" | "Avanzado";
-  duration: string;
-  price: number;
-  description: string;
-  category: string;
-  image_url?: string;
-}
-
-const categorias = [
-  "Salsa",
-  "Bachata",
-  "Hip-Hop",
-  "Contemporáneo",
-  "Reggaeton",
-  "Tango",
-];
-const niveles: ("Principiante" | "Intermedio" | "Avanzado")[] = [
+const categories = ["Salsa", "Bachata", "Merengue"];
+const levels: ("Principiante" | "Intermedio" | "Avanzado")[] = [
   "Principiante",
   "Intermedio",
   "Avanzado",
 ];
 
 export default function AdminPage() {
-  const [cursos, setCursos] = useState<Curso[]>([]);
+  const [cursos, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [cursoEditando, setCursoEditando] = useState<Curso | null>(null);
-  const [formData, setFormData] = useState<Partial<Curso>>({
+  const [courseToEdit, setCourseToEdit] = useState<Course | null>(null);
+  const [formData, setFormData] = useState<Partial<Course>>({
     title: "",
     instructor: "",
     level: "Principiante",
@@ -78,102 +62,11 @@ export default function AdminPage() {
     category: "",
   });
 
-  const fetchCursos = async () => {
-    try {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("courses")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching courses:", error);
-        return;
-      }
-      console.log(data);
-      setCursos(data || []);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const createCourse = async (courseData: Omit<Curso, "id">) => {
-    try {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("courses")
-        .insert([courseData])
-        .select();
-
-      if (error) {
-        console.error("Error creating course:", error);
-        return false;
-      }
-
-      if (data) {
-        setCursos((prev) => [data[0], ...prev]);
-      }
-      return true;
-    } catch (error) {
-      console.error("Error:", error);
-      return false;
-    }
-  };
-
-  const updateCourse = async (id: string, courseData: Partial<Curso>) => {
-    try {
-      setLoading(true);
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("courses")
-        .update(courseData)
-        .eq("id", id)
-        .select();
-
-      if (error) {
-        console.error("Error updating course:", error);
-        return false;
-      }
-
-      if (data) {
-        setCursos((prev) =>
-          prev.map((curso) => (curso.id === id ? data[0] : curso))
-        );
-      }
-      setLoading(false);
-
-      return true;
-    } catch (error) {
-      console.error("Error:", error);
-      return false;
-    }
-  };
-
-  const deleteCourse = async (id: string) => {
-    try {
-      const supabase = createClient();
-      const { error } = await supabase.from("courses").delete().eq("id", id);
-
-      if (error) {
-        console.error("Error deleting course:", error);
-        return false;
-      }
-
-      setCursos((prev) => prev.filter((curso) => curso.id !== id));
-      return true;
-    } catch (error) {
-      console.error("Error:", error);
-      return false;
-    }
-  };
-
   useEffect(() => {
-    fetchCursos();
+    fetchCourses(setCourses, setLoading);
   }, []);
 
-  const handleInputChange = (field: keyof Curso, value: string | number) => {
+  const handleInputChange = (field: keyof Course, value: string | number) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -183,13 +76,18 @@ export default function AdminPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const courseData = formData as Omit<Curso, "id">;
+    const courseData = formData as Omit<Course, "id">;
     let success = false;
 
-    if (cursoEditando && cursoEditando.id) {
-      success = await updateCourse(cursoEditando.id, formData);
+    if (courseToEdit && courseToEdit.id) {
+      success = await updateCourse(
+        courseToEdit.id,
+        formData,
+        setCourses,
+        setLoading
+      );
     } else {
-      success = await createCourse(courseData);
+      success = await createCourse(courseData, setCourses);
     }
 
     if (success) {
@@ -202,25 +100,25 @@ export default function AdminPage() {
         description: "",
         category: "",
       });
-      setCursoEditando(null);
+      setCourseToEdit(null);
       setIsDialogOpen(false);
     }
   };
 
-  const handleEdit = (curso: Curso) => {
-    setCursoEditando(curso);
+  const handleEdit = (curso: Course) => {
+    setCourseToEdit(curso);
     setFormData(curso);
     setIsDialogOpen(true);
   };
 
   const handleDelete = async (id: string) => {
     if (window.confirm("¿Estás seguro de que quieres eliminar este curso?")) {
-      await deleteCourse(id);
+      await deleteCourse(id, setCourses);
     }
   };
 
   const handleNewCourse = () => {
-    setCursoEditando(null);
+    setCourseToEdit(null);
     setFormData({
       title: "",
       instructor: "",
@@ -252,8 +150,6 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-
       {/* Header Section */}
       <section className="pt-20 pb-8 px-4">
         <div className="container mx-auto">
@@ -283,73 +179,6 @@ export default function AdminPage() {
                 Registrar Usuario
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="pb-8 px-4 ">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card className="bg-card border-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Total Cursos
-                    </p>
-                    <p className="text-3xl font-bold text-card-foreground">
-                      {cursos.length}
-                    </p>
-                  </div>
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Music className="w-6 h-6 text-primary" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Precio Promedio
-                    </p>
-                    <p className="text-3xl font-bold text-card-foreground">
-                      $
-                      {cursos.length > 0
-                        ? Math.round(
-                            cursos.reduce((total, curso) => total + 1.1, 0) /
-                              cursos.length
-                          )
-                        : 0}
-                    </p>
-                  </div>
-                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
-                    <Users className="w-6 h-6 text-accent" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Categorías
-                    </p>
-                    <p className="text-3xl font-bold text-card-foreground">
-                      {new Set(cursos.map((curso) => curso.category)).size}
-                    </p>
-                  </div>
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Star className="w-6 h-6 text-primary" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
@@ -451,7 +280,7 @@ export default function AdminPage() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {cursoEditando ? "Editar Curso" : "Crear Nuevo Curso"}
+              {courseToEdit ? "Editar Curso" : "Crear Nuevo Curso"}
             </DialogTitle>
           </DialogHeader>
 
@@ -495,7 +324,7 @@ export default function AdminPage() {
                     <SelectValue placeholder="Seleccionar categoría" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categorias.map((categoria) => (
+                    {categories.map((categoria) => (
                       <SelectItem key={categoria} value={categoria}>
                         {categoria}
                       </SelectItem>
@@ -514,7 +343,7 @@ export default function AdminPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {niveles.map((nivel) => (
+                    {levels.map((nivel) => (
                       <SelectItem key={nivel} value={nivel}>
                         {nivel}
                       </SelectItem>
@@ -582,7 +411,7 @@ export default function AdminPage() {
                 className="bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 <Save className="w-4 h-4 mr-2" />
-                {cursoEditando ? "Guardar Cambios" : "Crear Curso"}
+                {courseToEdit ? "Guardar Cambios" : "Crear Curso"}
               </Button>
             </div>
           </form>

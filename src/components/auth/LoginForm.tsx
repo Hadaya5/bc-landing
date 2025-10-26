@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
-import { Music, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -46,9 +46,6 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
-        <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-          <Music className="w-8 h-8 text-primary-foreground" />
-        </div>
         <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
         <p className="text-muted-foreground">
           Accede al panel administrativo de Baila Ciencias

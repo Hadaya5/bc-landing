@@ -1,82 +1,32 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Music, Clock, Users, Star, Filter, ArrowLeft } from "lucide-react";
+import { Music, Filter } from "lucide-react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
 import Loading from "@/components/Loading";
+import { Course } from "@/components";
+import { Course as CourseType, fetchCourses } from "@/lib/courses";
 
-interface Curso {
-  id: string;
-  title: string;
-  instructor: string;
-  level: "Principiante" | "Intermedio" | "Avanzado";
-  duration: string;
-  price: number;
-  description: string;
-  category: string;
-  image_url?: string;
-  created_at?: string;
-  updated_at?: string;
-}
-
-const categorias = ["Todos", "Salsa", "Bachata", "Kizomba"];
-const niveles = ["Todos", "Principiante", "Intermedio", "Avanzado"];
-
-export default function CursosPage() {
-  const [filtroCategoria, setFiltroCategoria] = useState("Todos");
-  const [filtroNivel, setFiltroNivel] = useState("Todos");
-  const [cursos, setCursos] = useState<Curso[]>([]);
+export default function CoursesPage() {
+  const [categoryFilter, setCategoryFilter] = useState("Todos");
+  const [levelFilter, setLevelFilter] = useState("Todos");
+  const [courses, setCourses] = useState<CourseType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchCursos = async () => {
-    try {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("courses")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching courses:", error);
-        return;
-      }
-      console.log(data);
-
-      setCursos(data || []);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const categories = ["Todos", "Salsa", "Bachata", "Kizomba"];
+  const levels = ["Todos", "Principiante", "Intermedio", "Avanzado"];
 
   useEffect(() => {
-    fetchCursos();
+    fetchCourses(setCourses, setLoading);
   }, []);
 
-  const cursosFiltrados = cursos.filter((curso) => {
+  const filteredCourses = courses.filter((course) => {
     const categoriaMatch =
-      filtroCategoria === "Todos" || curso.category === filtroCategoria;
-    const nivelMatch = filtroNivel === "Todos" || curso.level === filtroNivel;
+      categoryFilter === "Todos" || course.category === categoryFilter;
+    const nivelMatch = levelFilter === "Todos" || course.level === levelFilter;
     return categoriaMatch && nivelMatch;
   });
-
-  const getNivelColor = (nivel: string) => {
-    switch (nivel) {
-      case "Principiante":
-        return "bg-green-100 text-green-800";
-      case "Intermedio":
-        return "bg-yellow-100 text-yellow-800";
-      case "Avanzado":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
 
   if (loading) {
     return <Loading message="Cargando cursos..." />;
@@ -112,16 +62,14 @@ export default function CursosPage() {
 
             <div className="flex flex-wrap gap-2">
               <span className="text-sm text-muted-foreground">Categoría:</span>
-              {categorias.map((categoria) => (
+              {categories.map((categoria) => (
                 <Button
                   key={categoria}
-                  variant={
-                    filtroCategoria === categoria ? "default" : "outline"
-                  }
+                  variant={categoryFilter === categoria ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setFiltroCategoria(categoria)}
+                  onClick={() => setCategoryFilter(categoria)}
                   className={
-                    filtroCategoria === categoria
+                    categoryFilter === categoria
                       ? "bg-primary text-primary-foreground"
                       : ""
                   }
@@ -133,14 +81,14 @@ export default function CursosPage() {
 
             <div className="flex flex-wrap gap-2">
               <span className="text-sm text-muted-foreground">Nivel:</span>
-              {niveles.map((nivel) => (
+              {levels.map((nivel) => (
                 <Button
                   key={nivel}
-                  variant={filtroNivel === nivel ? "default" : "outline"}
+                  variant={levelFilter === nivel ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setFiltroNivel(nivel)}
+                  onClick={() => setLevelFilter(nivel)}
                   className={
-                    filtroNivel === nivel
+                    levelFilter === nivel
                       ? "bg-primary text-primary-foreground"
                       : ""
                   }
@@ -157,59 +105,12 @@ export default function CursosPage() {
       <section id="cursos" className="pb-16 px-4">
         <div className="container mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 ">
-            {cursosFiltrados.map((curso, index) => (
-              <Card
-                key={curso.id}
-                className=" bg-card border-border hover:shadow-lg transition-all duration-300"
-              >
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <Badge className={getNivelColor(curso.level)}>
-                      {curso.level}
-                    </Badge>
-                    <div className="flex items-center">
-                      <Star className="w-4 h-4 fill-accent text-accent mr-1" />
-                      <span className="text-sm font-medium">4.8</span>
-                    </div>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-card-foreground mb-2 group-hover:text-primary transition-colors">
-                    {curso.title}
-                  </h3>
-
-                  <p className="text-muted-foreground text-sm mb-4 text-pretty">
-                    {curso.description}
-                  </p>
-
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Users className="w-4 h-4 mr-2 text-primary" />
-                      Instructor: {curso.instructor}
-                    </div>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="w-4 h-4 mr-2 text-primary" />
-                      {curso.duration}
-                    </div>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Users className="w-4 h-4 mr-2 text-primary" />
-                      Categoría: {curso.category}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-primary">
-                      ${curso.price}
-                    </span>
-                    <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                      Inscribirse
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+            {filteredCourses.map((course) => (
+              <Course key={course.id} course={course} />
             ))}
           </div>
 
-          {cursosFiltrados.length === 0 && !loading && (
+          {filteredCourses.length === 0 && !loading && (
             <div className="text-center py-12 ">
               <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
                 <Music className="w-10 h-10 text-muted-foreground" />
@@ -248,7 +149,7 @@ export default function CursosPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-3 bg-transparent"
+                className="border-primary text-primary hover:bg-secondary hover:text-secondary-foreground px-8 py-3 bg-transparent"
               >
                 Volver al Inicio
               </Button>

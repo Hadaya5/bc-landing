@@ -1,13 +1,18 @@
 "use client";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Mail, MapPin, MessageCircle, Instagram } from "lucide-react";
-import "./globals.css";
 import { cn } from "@/lib/utils";
 import { useIntersect, useIntersectElements } from "@/hooks/useIntersect";
-import { VideoPlayer, FeatureCard, TestimonialCard } from "@/components";
+import {
+  VideoPlayer,
+  FeatureCard,
+  TestimonialCard,
+  Title,
+  Subtitle,
+} from "@/components";
 import { featuresData, testimonialsData } from "@/data/rootPageData";
+import "./globals.css";
 
 export default function HomePage() {
   const [textColor, setTextColor] = useState<
@@ -55,14 +60,14 @@ export default function HomePage() {
           )}
         >
           <div className="container mx-auto mb-5 px-10 md:pr-0 max-w-2xl mt-20 lg:mt-0">
-            <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 text-balance text-center">
+            <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 text-balance text-center"></h1>
+            <Title type="h1">
               Aprende a Bailar con <span className="text-accent">Pasión</span>
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8 text-justify text-pretty max-w-2xl mx-auto">
+            </Title>
+            <p className="text-xl text-muted-foreground mb-8 text-center md:text-justify text-pretty max-w-2xl mx-auto">
               Desde principiantes hasta avanzados, ofrecemos clases de Bachata,
-              Salsa y Kizomba con profesores especializados. Aprende técnica,
-              ritmo y estilo mientras disfrutas de un ambiente divertido y
-              social.
+              Salsa y Kizomba. Aprende técnica, ritmo y estilo mientras
+              disfrutas de un ambiente divertido y social.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -87,10 +92,10 @@ export default function HomePage() {
           <div className="container mx-auto">
             <div className="grid md:grid-cols-2 gap-5">
               <div className="flex flex-col justify-center items-center sticky top-1 h-screen">
-                <h2 className="text-4xl font-bold text-center">
+                <Title className="text-center">
                   Descubre el arte del baile con nuestros cursos de
-                </h2>
-                <div className="mt-10 text-xl text-center">
+                </Title>
+                <div className="mt-7 text-xl text-center">
                   <p
                     className={cn(
                       video1IsVisible && "transition-transform scale-150 ml-4"
@@ -174,9 +179,9 @@ export default function HomePage() {
         >
           <div className="container mx-auto">
             <div className="text-center mb-12 animate-on-scroll">
-              <h2 className={cn("text-4xl font-bold mb-4", textColor)}>
+              <Title className={`mb-4 ${textColor}`}>
                 ¿Por qué elegir Baila Ciencias?
-              </h2>
+              </Title>
               <p
                 className={cn(
                   "text-xl max-w-2xl mx-auto text-pretty",
@@ -184,7 +189,7 @@ export default function HomePage() {
                 )}
               >
                 Ofrecemos una experiencia de aprendizaje única con instructores
-                profesionales y metodologías innovadoras
+                profesionales
               </p>
             </div>
 
@@ -248,13 +253,13 @@ export default function HomePage() {
       >
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12 animate-on-scroll">
-            <h2 className="relative top-3 text-4xl font-bold mb-4">
+            <Title className="relative top-3">
               ¿List@ para comenzar a bailar?
-            </h2>
-            <p className="text-xltext-pretty">
-              Contáctanos para más información sobre nuestros cursos y horarios
-              disponibles
-            </p>
+            </Title>
+            <Subtitle
+              text="Contáctanos para más información sobre nuestros cursos y horarios
+              disponibles"
+            />
           </div>
 
           <div className="grid md:grid-cols-2 gap-12">

@@ -25,7 +25,7 @@ export const featuresData = [
       icon: BookOpen,
       title: "Múltiples Estilos",
       description:
-        "Desde salsa y bachata hasta hip-hop y danza contemporánea. Encuentra tu estilo favorito.",
+        "Desde salsa y bachata hasta kizomba y merengue. Encuentra tu estilo favorito.",
       iconColor: "primary" as const,
     },
     {
@@ -63,9 +63,9 @@ export const testimonialsData = [
     },
     {
       name: "Carlos Rodríguez",
-      role: "Estudiante de Hip-Hop",
+      role: "Estudiante de Kizomba",
       testimonial:
-        "Las clases de hip-hop son geniales. He mejorado mucho mi técnica y he hecho grandes amigos aquí.",
+        "Las clases son geniales. He mejorado mucho mi técnica y he hecho grandes amigos aquí.",
       initials: "CR",
       rating: 5,
     },
@@ -73,7 +73,7 @@ export const testimonialsData = [
       name: "Ana López",
       role: "Estudiante de Bachata",
       testimonial:
-        "La bachata me ha cambiado la vida. Los profesores son muy pacientes y el ambiente es perfecto para aprender.",
+        "Los profesores son muy pacientes y el ambiente es perfecto para aprender.",
       initials: "AL",
       rating: 5,
     },
