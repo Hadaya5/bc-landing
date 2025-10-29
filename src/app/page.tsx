@@ -152,7 +152,7 @@ export default function HomePage() {
                   <VideoPlayer
                     width={320}
                     className="rounded-2xl"
-                    src="/bachataVideo.mp4"
+                    src="/salsaVideo.mp4"
                   />
                 </div>
                 <div
@@ -162,7 +162,7 @@ export default function HomePage() {
                   <VideoPlayer
                     width={320}
                     className="rounded-2xl"
-                    src="/bachataVideo.mp4"
+                    src="/kizombaVideo.mp4"
                   />
                 </div>
               </div>
