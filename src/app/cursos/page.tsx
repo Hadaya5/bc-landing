@@ -104,7 +104,7 @@ export default function CoursesPage() {
       {/* Courses Grid */}
       <section id="cursos" className="pb-16 px-4">
         <div className="container mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 ">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCourses.map((course) => (
               <Course key={course.id} course={course} />
             ))}

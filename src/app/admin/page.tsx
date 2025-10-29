@@ -39,16 +39,10 @@ import {
   fetchCourses,
   updateCourse,
 } from "@/lib/courses";
-
-const categories = ["Salsa", "Bachata", "Merengue"];
-const levels: ("Principiante" | "Intermedio" | "Avanzado")[] = [
-  "Principiante",
-  "Intermedio",
-  "Avanzado",
-];
+import { Course as CourseCard } from "@/components";
 
 export default function AdminPage() {
-  const [cursos, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [courseToEdit, setCourseToEdit] = useState<Course | null>(null);
@@ -61,6 +55,13 @@ export default function AdminPage() {
     description: "",
     category: "",
   });
+
+  const categories = ["Salsa", "Bachata", "Merengue"];
+  const levels: ("Principiante" | "Intermedio" | "Avanzado")[] = [
+    "Principiante",
+    "Intermedio",
+    "Avanzado",
+  ];
 
   useEffect(() => {
     fetchCourses(setCourses, setLoading);
@@ -131,8 +132,8 @@ export default function AdminPage() {
     setIsDialogOpen(true);
   };
 
-  const getNivelColor = (nivel: string) => {
-    switch (nivel) {
+  const getLevelColor = (level: string) => {
+    switch (level) {
       case "Principiante":
         return "bg-green-100 text-green-800";
       case "Intermedio":
@@ -186,73 +187,19 @@ export default function AdminPage() {
       {/* Courses Management */}
       <section className="pb-16 px-4">
         <div className="container mx-auto">
-          <div className="grid gap-6">
-            {cursos.map((curso) => (
-              <Card key={curso.id} className=" bg-card border-border">
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-card-foreground">
-                          {curso.title}
-                        </h3>
-                        <Badge className={getNivelColor(curso.level)}>
-                          {curso.level}
-                        </Badge>
-                      </div>
-
-                      <p className="text-muted-foreground mb-3">
-                        {curso.description}
-                      </p>
-
-                      <div className="grid md:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                        <div className="flex items-center">
-                          <Users className="w-4 h-4 mr-2 text-primary" />
-                          Instructor: {curso.instructor}
-                        </div>
-                        <div className="flex items-center">
-                          <Clock className="w-4 h-4 mr-2 text-primary" />
-                          {curso.duration}
-                        </div>
-                        <div className="flex items-center">
-                          <Users className="w-4 h-4 mr-2 text-primary" />
-                          Categoría: {curso.category}
-                        </div>
-                        <div className="flex items-center">
-                          <span className="text-lg font-bold text-primary">
-                            ${curso.price}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2 mt-4 md:mt-0">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(curso)}
-                        className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-                      >
-                        <Edit className="w-4 h-4 mr-2" />
-                        Editar
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => curso.id && handleDelete(curso.id)}
-                        className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        Eliminar
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {courses.map((course) => (
+              <CourseCard
+                key={course.id}
+                course={course}
+                mode="admin"
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             ))}
           </div>
 
-          {cursos.length === 0 && !loading && (
+          {courses.length === 0 && !loading && (
             <div className="text-center py-12 ">
               <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
                 <Music className="w-10 h-10 text-muted-foreground" />
@@ -343,9 +290,9 @@ export default function AdminPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {levels.map((nivel) => (
-                      <SelectItem key={nivel} value={nivel}>
-                        {nivel}
+                    {levels.map((level) => (
+                      <SelectItem key={level} value={level}>
+                        {level}
                       </SelectItem>
                     ))}
                   </SelectContent>

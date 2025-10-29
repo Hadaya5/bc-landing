@@ -1,11 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Users } from "lucide-react";
-import { Course as CourseProps } from "@/app/cursos/page";
+import { Clock, Users, Edit, Trash2 } from "lucide-react";
+import { Course as CourseProps } from "@/lib/courses";
 import Link from "next/link";
 
-export function Course({ course }: { course: CourseProps }) {
+type CourseMode = "public" | "admin";
+
+interface CourseComponentProps {
+  course: CourseProps;
+  mode?: CourseMode;
+  onEdit?: (course: CourseProps) => void;
+  onDelete?: (id: string) => void;
+}
+
+export function Course({
+  course,
+  mode = "public",
+  onEdit,
+  onDelete,
+}: CourseComponentProps) {
   const getLevelColor = (nivel: string) => {
     switch (nivel) {
       case "Principiante":
@@ -55,11 +69,35 @@ export function Course({ course }: { course: CourseProps }) {
           <span className="text-2xl font-bold text-primary">
             ${course.price}
           </span>
-          <Link href="/#contacto">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              Contáctanos
-            </Button>
-          </Link>
+
+          {mode === "public" ? (
+            <Link href="/#contacto">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                Contáctanos
+              </Button>
+            </Link>
+          ) : (
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onEdit && onEdit(course)}
+                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                Editar
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => course.id && onDelete && onDelete(course.id)}
+                className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Eliminar
+              </Button>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
