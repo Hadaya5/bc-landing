@@ -131,6 +131,7 @@ export default function HomePage() {
                     width={200}
                     className="rounded-2xl"
                     src="/bachataVideo.mp4"
+                    posterSrc="/bachataPoster.jpg"
                   />
                 </div>
               </div>
@@ -143,6 +144,7 @@ export default function HomePage() {
                     width={320}
                     className="rounded-2xl"
                     src="/bachataVideo.mp4"
+                    posterSrc="/bachataPoster.jpg"
                   />
                 </div>
                 <div
@@ -153,6 +155,7 @@ export default function HomePage() {
                     width={320}
                     className="rounded-2xl"
                     src="/salsaVideo.mp4"
+                    posterSrc="/salsaPoster.jpg"
                   />
                 </div>
                 <div
@@ -163,6 +166,7 @@ export default function HomePage() {
                     width={320}
                     className="rounded-2xl"
                     src="/kizombaVideo.mp4"
+                    posterSrc="/kizombaPoster.jpg"
                   />
                 </div>
               </div>

@@ -1,8 +1,9 @@
 type VideoPlayerProps = React.VideoHTMLAttributes<HTMLVideoElement> & {
   src: string;
+  posterSrc: string;
 };
 
-export function VideoPlayer({ src, ...rest }: VideoPlayerProps) {
+export function VideoPlayer({ src, posterSrc, ...rest }: VideoPlayerProps) {
   return (
     <video
       autoPlay
@@ -11,9 +12,9 @@ export function VideoPlayer({ src, ...rest }: VideoPlayerProps) {
       playsInline
       controls
       preload="metadata"
-      poster="/poster.jpg"
       {...rest}
       src={src}
+      poster={posterSrc}
     />
   );
 }
