@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,24 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Music,
-  Plus,
-  Edit,
-  Trash2,
-  Users,
-  Clock,
-  Save,
-  X,
-  UserPlus,
-} from "lucide-react";
+import { Music, Plus, Save, X, UserPlus } from "lucide-react";
 import Loading from "@/components/Loading";
 import {
   Course,
@@ -39,7 +27,7 @@ import {
   fetchCourses,
   updateCourse,
 } from "@/lib/courses";
-import { Course as CourseCard } from "@/components";
+import { CourseCard } from "@/components";
 
 export default function AdminPage() {
   const [courses, setCourses] = useState<Course[]>([]);

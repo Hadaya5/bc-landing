@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Music, Filter } from "lucide-react";
 import Link from "next/link";
 import Loading from "@/components/Loading";
-import { Course } from "@/components";
+import { CourseCard } from "@/components";
 import { Course as CourseType, fetchCourses } from "@/lib/courses";
 
 export default function CoursesPage() {
@@ -106,7 +106,7 @@ export default function CoursesPage() {
         <div className="container mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredCourses.map((course) => (
-              <Course key={course.id} course={course} />
+              <CourseCard key={course.id} course={course} />
             ))}
           </div>
 

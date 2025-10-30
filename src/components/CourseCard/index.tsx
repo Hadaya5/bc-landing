@@ -7,19 +7,19 @@ import Link from "next/link";
 
 type CourseMode = "public" | "admin";
 
-interface CourseComponentProps {
+interface CourseCardProps {
   course: CourseProps;
   mode?: CourseMode;
   onEdit?: (course: CourseProps) => void;
   onDelete?: (id: string) => void;
 }
 
-export function Course({
+export function CourseCard({
   course,
   mode = "public",
   onEdit,
   onDelete,
-}: CourseComponentProps) {
+}: CourseCardProps) {
   const getLevelColor = (nivel: string) => {
     switch (nivel) {
       case "Principiante":

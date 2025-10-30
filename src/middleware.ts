@@ -44,7 +44,6 @@ export async function middleware(request: NextRequest) {
 
       // If there's an error or no user is authenticated, redirect to login
       if (error || !user) {
-        console.log("Auth error or no user:", error?.message || "No user found");
         const url = request.nextUrl.clone();
         url.pathname = "/admin/login";
         return NextResponse.redirect(url);
