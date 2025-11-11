@@ -13,6 +13,7 @@ import {
 } from "@/components";
 import { featuresData, testimonialsData } from "@/data/rootPageData";
 import "./globals.css";
+import "./animations.css";
 
 export default function HomePage() {
   const [textColor, setTextColor] = useState<

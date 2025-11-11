@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { redirect, usePathname } from "next/navigation";
-import { Logo } from "../Logo";
+import { Logo } from "../../Logo";
 
 export function Navbar() {
   const { user, signOut } = useAuth();

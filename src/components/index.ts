@@ -1,5 +1,5 @@
-export * from "./Navbar"
-export * from "./Footer"
+export * from "./layout/Navbar"
+export * from "./layout/Footer"
 export * from "./Logo"
 export * from "./Loading"
 export * from "./VideoPlayer"
