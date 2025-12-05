@@ -86,7 +86,7 @@ export default function HomePage() {
         <section
           ref={discoverSectionTef}
           className={cn(
-            "pb-5 md:pb-15 px-4 pt-5 h-full relative  bg-gray-300  transition-colors duration-500 ease-in",
+            "pb-5 md:pb-15 px-4 pt-5 h-full relative bg-gray-300 transition-colors duration-500 ease-in",
             isTestimoniesSectionVisible && "bg-primary"
           )}
         >

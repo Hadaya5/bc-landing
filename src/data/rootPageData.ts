@@ -5,7 +5,7 @@ import {
     Star,
   } from "lucide-react";
 
-  // Datos de features
+
 export const featuresData = [
     {
       icon: Music,
@@ -51,7 +51,7 @@ export const featuresData = [
     },
   ];
 
-  // Datos de testimonios
+
 export const testimonialsData = [
     {
       name: "María González",

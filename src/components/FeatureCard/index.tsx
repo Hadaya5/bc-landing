@@ -22,9 +22,7 @@ export function FeatureCard({
     iconColor === "primary" ? "text-primary" : "text-accent";
 
   return (
-    <Card
-      className={`animate-on-scroll bg-card border-border hover:shadow-lg transition-shadow duration-300 ${className}`}
-    >
+    <Card className={`card animate-on-scroll ${className}`}>
       <CardContent className="p-6 text-center">
         <div
           className={`w-16 h-16 ${iconBgColor} rounded-full flex items-center justify-center mx-auto mb-4`}

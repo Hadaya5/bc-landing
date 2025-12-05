@@ -40,11 +40,6 @@
   --sidebar-ring: oklch(0.24 0.1 264 / 0.5); /* Semi-transparent Deep Navy */
 }
 
-.bg-custom-gradient {
-
- background: linear-gradient(166deg, rgba(247, 226, 119, 0.83) 0%, rgba(255, 255, 255, 0.85) 70%, rgba(36, 45, 224, 1) 100%);
-}
-
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -129,4 +124,12 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@utility card {
+    @apply bg-card border-border hover:shadow-[0_0_20px_5px_var(--secondary)] transition-shadow duration-100;
+}
+
+.bg-custom-gradient {
+ background: linear-gradient(166deg, rgba(247, 226, 119, 0.83) 0%, rgba(255, 255, 255, 0.85) 70%, rgba(36, 45, 224, 1) 100%);
 }
