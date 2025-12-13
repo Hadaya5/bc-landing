@@ -1,13 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { Button } from "@/components/ui/button";
-import { Mail, MapPin, MessageCircle, Instagram } from "lucide-react";
+import { Mail, MapPin, Instagram } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIntersect, useIntersectElements } from "@/hooks/useIntersect";
+
 import {
   VideoPlayer,
   FeatureCard,
-  TestimonialCard,
+  TestimonialPanel,
   Title,
   Subtitle,
 } from "@/components";
@@ -20,11 +24,16 @@ export default function HomePage() {
     "text-foreground" | "text-secondary"
   >("text-foreground");
 
+  const containerRef = useRef(null);
+  const trackRef = useRef(null);
+
+  gsap.registerPlugin(ScrollTrigger);
+
   //Observer hook for background setting
   const {
     intersectionRef: featuresRef,
     isVisible: isTestimoniesSectionVisible,
-  } = useIntersect(0.2, (isIntersecting) => {
+  } = useIntersect(0.06, (isIntersecting) => {
     setTextColor(isIntersecting ? "text-secondary" : "text-foreground");
   });
 
@@ -43,6 +52,26 @@ export default function HomePage() {
     useIntersect(0.6);
 
   useIntersectElements(0.1, ".animate-on-scroll");
+
+  useGSAP(
+    () => {
+      const track = trackRef.current;
+      if (!track) return;
+      const totalWidth = (track as HTMLElement).scrollWidth - window.innerWidth;
+
+      gsap.to(track, {
+        x: -totalWidth,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          pin: true,
+          scrub: 1,
+          end: "+=3000",
+        },
+      });
+    },
+    { scope: containerRef }
+  );
 
   return (
     <div
@@ -80,7 +109,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="h-screen mt-15 ml-15 hidden lg:flex">
-            <img src="hero-image.png" />
+            <img src="images/hero-image.png" />
           </div>
         </section>
         <section
@@ -131,8 +160,8 @@ export default function HomePage() {
                   <VideoPlayer
                     width={200}
                     className="rounded-2xl"
-                    src="/bachataVideo.mp4"
-                    posterSrc="/bachataPoster.jpg"
+                    src="videos/bachataVideo.mp4"
+                    posterSrc="images/bachataPoster.jpg"
                   />
                 </div>
               </div>
@@ -144,8 +173,8 @@ export default function HomePage() {
                   <VideoPlayer
                     width={320}
                     className="rounded-2xl"
-                    src="/bachataVideo.mp4"
-                    posterSrc="/bachataPoster.jpg"
+                    src="videos/bachataVideo.mp4"
+                    posterSrc="images/bachataPoster.jpg"
                   />
                 </div>
                 <div
@@ -155,8 +184,8 @@ export default function HomePage() {
                   <VideoPlayer
                     width={320}
                     className="rounded-2xl"
-                    src="/salsaVideo.mp4"
-                    posterSrc="/salsaPoster.jpg"
+                    src="videos/salsaVideo.mp4"
+                    posterSrc="images/salsaPoster.jpg"
                   />
                 </div>
                 <div
@@ -166,8 +195,8 @@ export default function HomePage() {
                   <VideoPlayer
                     width={320}
                     className="rounded-2xl"
-                    src="/kizombaVideo.mp4"
-                    posterSrc="/kizombaPoster.jpg"
+                    src="videos/kizombaVideo.mp4"
+                    posterSrc="images/kizombaPoster.jpg"
                   />
                 </div>
               </div>
@@ -212,38 +241,21 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Testimonials Section */}
-        <section className="py-16 px-4 transition-colors duration-300 ease-in bg-muted/5">
-          <div className="container mx-auto">
-            <div className="text-center mb-12 animate-on-scroll">
-              <h2 className={cn("text-4xl font-bold mb-4", textColor)}>
-                Lo que dicen nuestros estudiantes
-              </h2>
-              <p
-                className={cn(
-                  "text-xl text-muted-foreground max-w-2xl mx-auto text-pretty",
-                  textColor
-                )}
-              >
-                Testimonios reales de estudiantes que han descubierto su pasión
-                por el baile con nosotros
-              </p>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-8">
-              {testimonialsData.map((testimonial, index) => (
-                <TestimonialCard
-                  key={index}
-                  name={testimonial.name}
-                  role={testimonial.role}
-                  testimonial={testimonial.testimonial}
-                  initials={testimonial.initials}
-                  rating={testimonial.rating}
-                />
-              ))}
-            </div>
+        <div
+          ref={containerRef}
+          style={{
+            height: "100vh",
+            width: "fit-content",
+          }}
+        >
+          {/* Este es el carril que se moverá */}
+          <div ref={trackRef} className="flex h-full w-fit">
+            {/* Paneles (Cards) - render a panel per testimonial to enable horizontal scroll */}
+            {testimonialsData.map((t, i) => (
+              <TestimonialPanel key={i} data={t} />
+            ))}
           </div>
-        </section>
+        </div>
       </div>
 
       {/* Contact Section */}

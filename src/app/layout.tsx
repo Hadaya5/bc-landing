@@ -31,7 +31,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Baila Ciencias" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
         <AuthProvider>
           <Navbar />
