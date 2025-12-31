@@ -1,6 +1,6 @@
 "use client";
-import { useRef, useState } from "react";
 import gsap from "gsap";
+import { useRef, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,14 @@ import {
   TestimonialPanel,
   Title,
   Subtitle,
+  TestimonialCard,
 } from "@/components";
 import { featuresData, testimonialsData } from "@/data/rootPageData";
+import { SplitText } from "gsap-trial/SplitText";
 import "./globals.css";
 import "./animations.css";
+
+gsap.registerPlugin(SplitText);
 
 export default function HomePage() {
   const [textColor, setTextColor] = useState<
@@ -26,6 +30,7 @@ export default function HomePage() {
 
   const containerRef = useRef(null);
   const trackRef = useRef(null);
+  const introPanelRef = useRef(null);
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -55,6 +60,7 @@ export default function HomePage() {
 
   useGSAP(
     () => {
+      // Horizontal scroll animation for testimonial panels
       const track = trackRef.current;
       if (!track) return;
       const totalWidth = (track as HTMLElement).scrollWidth - window.innerWidth;
@@ -69,6 +75,29 @@ export default function HomePage() {
           end: "+=3000",
         },
       });
+
+      // Split the text into words and characters
+      let split = new SplitText(introPanelRef.current, {
+        type: "words, chars",
+      });
+
+      gsap.from(split.chars, {
+        scrollTrigger: {
+          trigger: introPanelRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          toggleActions: "play none none none",
+        },
+        duration: 0.5,
+        opacity: 0,
+        y: 20,
+        stagger: 0.03,
+        ease: "power1.out",
+      });
+
+      return () => {
+        split.revert(); // Reverts the text back to its original state
+      };
     },
     { scope: containerRef }
   );
@@ -156,19 +185,19 @@ export default function HomePage() {
                     , conexión y flow
                   </p>
                 </div>
-                <div className="md:hidden h-fit z-[60] pt-5 flex justify-center items-start animate-scale-on-scroll">
+                <div className="md:hidden h-fit z-60 pt-5 flex justify-center items-start animate-scale-on-scroll">
                   <VideoPlayer
-                    width={200}
+                    width={270}
                     className="rounded-2xl"
-                    src="videos/bachataVideo.mp4"
-                    posterSrc="images/bachataPoster.jpg"
+                    src="videos/salsaVideo.mp4"
+                    posterSrc="images/salsaPoster.jpg"
                   />
                 </div>
               </div>
               <div className="hidden md:block">
                 <div
                   ref={video1Ref}
-                  className="h-fit z-[60] flex justify-center items-start animate-scale-on-scroll"
+                  className="h-fit z-60 flex justify-center items-start animate-scale-on-scroll"
                 >
                   <VideoPlayer
                     width={320}
@@ -241,21 +270,65 @@ export default function HomePage() {
           </div>
         </section>
 
-        <div
+        <section
           ref={containerRef}
-          style={{
-            height: "100vh",
-            width: "fit-content",
-          }}
+          className="hidden md:block fit-content h-screen"
         >
-          {/* Este es el carril que se moverá */}
+          {/* Testimonial Panels */}
           <div ref={trackRef} className="flex h-full w-fit">
             {/* Paneles (Cards) - render a panel per testimonial to enable horizontal scroll */}
+            <div className="w-screen h-full flex flex-col justify-center items-center shrink-0 px-10">
+              <div
+                id="testimonial-title"
+                ref={introPanelRef}
+                className="text-center border-2 border-secondary rounded-2xl p-20"
+              >
+                {" "}
+                <Title
+                  className={`mb-4 ${textColor} text-4xl sm:text-5xl md:text-7xl`}
+                >
+                  Testimonios
+                </Title>
+                <Subtitle text="Lo que dicen nuestros estudiantes sobre su ritmo y pasión." />
+                <p className="mt-4 animate-bounce text-2xl">↓ Desliza ↓</p>
+              </div>
+            </div>
             {testimonialsData.map((t, i) => (
               <TestimonialPanel key={i} data={t} />
             ))}
           </div>
-        </div>
+        </section>
+        <section className="block md:hidden py-16 px-4 transition-colors duration-300 ease-in bg-muted/5">
+          <div className="container mx-auto">
+            <div className="text-center mb-12 animate-on-scroll">
+              <h2 className={cn("text-4xl font-bold mb-4", textColor)}>
+                Lo que dicen nuestros estudiantes
+              </h2>
+              <p
+                className={cn(
+                  "text-xl text-muted-foreground max-w-2xl mx-auto text-pretty",
+                  textColor
+                )}
+              >
+                Testimonios reales de estudiantes que han descubierto su pasión
+                por el baile con nosotros
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-8">
+              {testimonialsData.map((testimonial, index) => (
+                <TestimonialCard
+                  key={index}
+                  name={testimonial.name}
+                  role={testimonial.role}
+                  testimonial={testimonial.testimonial}
+                  initials={testimonial.initials}
+                  rating={testimonial.rating}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
 
       {/* Contact Section */}
