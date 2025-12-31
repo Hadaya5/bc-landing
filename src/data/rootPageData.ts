@@ -83,7 +83,7 @@ export const testimonialsData = [
       initials: "AL",
       image: "images/avatar-testimony-3.jpg",
       rating: 5,
-      styles: "bg-secondary/85 text-primary-foreground",
+      styles: "bg-gray-300 text-primary",
       quoteColor: "text-primary",
     },
   ];

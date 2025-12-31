@@ -1,6 +1,4 @@
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Star } from "lucide-react";
 
 interface Testimonial {
   name: string;
@@ -18,7 +16,6 @@ interface Props {
 }
 
 export function TestimonialPanel({ data }: Props) {
-  const rating = 5;
   return (
     <div className="panel w-screen h-full grid place-items-center">
       <div
@@ -45,7 +42,7 @@ export function TestimonialPanel({ data }: Props) {
               />
             </div>
             <div className="sm:col-span-6 sm:flex flex-col justify-center">
-              <h3 className="relative text-xl xs:text-left font-semibold mb-2">
+              <h3 className="relative text-xl xs:text-left font-semibold mb-1">
                 {data.name}
               </h3>
               {data.role && (
