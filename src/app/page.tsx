@@ -1,13 +1,12 @@
 "use client";
-import gsap from "gsap";
 import { useRef, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import { Button } from "@/components/ui/button";
 import { Mail, MapPin, Instagram } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIntersect, useIntersectElements } from "@/hooks/useIntersect";
-
+import { useVideoObservers } from "@/hooks/useVideoObservers";
+import { useGSAPAnimations } from "@/hooks/useGSAPAnimations";
 import {
   VideoPlayer,
   FeatureCard,
@@ -18,89 +17,57 @@ import {
 } from "@/components";
 import { featuresData, testimonialsData } from "@/data/rootPageData";
 import { SplitText } from "gsap-trial/SplitText";
+import { INTERSECTION_THRESHOLDS, CSS_SELECTORS } from "@/lib/animations";
+import gsap from "gsap";
 import "./globals.css";
 import "./animations.css";
 
-gsap.registerPlugin(SplitText);
+// Register GSAP plugins outside the component to avoid re-registrations
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export default function HomePage() {
+  // State for text color based on the visible section
   const [textColor, setTextColor] = useState<
     "text-foreground" | "text-secondary"
   >("text-foreground");
 
-  const containerRef = useRef(null);
-  const trackRef = useRef(null);
-  const introPanelRef = useRef(null);
+  // References for GSAP animations
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const introPanelRef = useRef<HTMLDivElement>(null);
 
-  gsap.registerPlugin(ScrollTrigger);
-
-  //Observer hook for background setting
+  // Observer to change text color when testimonials section is visible
   const {
     intersectionRef: featuresRef,
     isVisible: isTestimoniesSectionVisible,
-  } = useIntersect(0.06, (isIntersecting) => {
-    setTextColor(isIntersecting ? "text-secondary" : "text-foreground");
-  });
-
-  //Observer hook for home section
-  const {
-    intersectionRef: discoverSectionTef,
-    isVisible: isDiscoverSectionVisible,
-  } = useIntersect(0.01);
-
-  //Observer videos hook
-  const { intersectionRef: video1Ref, isVisible: video1IsVisible } =
-    useIntersect(0.6);
-  const { intersectionRef: video2Ref, isVisible: video2IsVisible } =
-    useIntersect(0.6);
-  const { intersectionRef: video3Ref, isVisible: video3IsVisible } =
-    useIntersect(0.6);
-
-  useIntersectElements(0.1, ".animate-on-scroll");
-
-  useGSAP(
-    () => {
-      // Horizontal scroll animation for testimonial panels
-      const track = trackRef.current;
-      if (!track) return;
-      const totalWidth = (track as HTMLElement).scrollWidth - window.innerWidth;
-
-      gsap.to(track, {
-        x: -totalWidth,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          pin: true,
-          scrub: 1,
-          end: "+=3000",
-        },
-      });
-
-      // Split the text into words and characters
-      let split = new SplitText(introPanelRef.current, {
-        type: "words, chars",
-      });
-
-      gsap.from(split.chars, {
-        scrollTrigger: {
-          trigger: introPanelRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none none",
-        },
-        duration: 0.5,
-        opacity: 0,
-        y: 20,
-        stagger: 0.03,
-        ease: "power1.out",
-      });
-
-      return () => {
-        split.revert(); // Reverts the text back to its original state
-      };
-    },
-    { scope: containerRef }
+  } = useIntersect(
+    INTERSECTION_THRESHOLDS.TESTIMONIES_SECTION,
+    (isIntersecting) => {
+      setTextColor(isIntersecting ? "text-secondary" : "text-foreground");
+    }
   );
+
+  // Observer for the discover section
+  const {
+    intersectionRef: discoverSectionRef,
+    isVisible: isDiscoverSectionVisible,
+  } = useIntersect(INTERSECTION_THRESHOLDS.DISCOVER_SECTION);
+
+  // Observers for video elements
+  const { video1, video2, video3 } = useVideoObservers();
+
+  // Observer for elements with scroll animation
+  useIntersectElements(
+    INTERSECTION_THRESHOLDS.ANIMATE_ON_SCROLL,
+    CSS_SELECTORS.ANIMATE_ON_SCROLL
+  );
+
+  // Custom hook for all GSAP animations
+  useGSAPAnimations({
+    containerRef,
+    trackRef,
+    introPanelRef,
+  });
 
   return (
     <div
@@ -142,7 +109,7 @@ export default function HomePage() {
           </div>
         </section>
         <section
-          ref={discoverSectionTef}
+          ref={discoverSectionRef}
           className={cn(
             "pb-5 md:pb-15 px-4 pt-5 h-full relative bg-gray-300 transition-colors duration-500 ease-in",
             isTestimoniesSectionVisible && "bg-primary"
@@ -157,7 +124,7 @@ export default function HomePage() {
                 <div className="mt-7 text-xl text-center">
                   <p
                     className={cn(
-                      video1IsVisible && "transition-transform scale-150 ml-4"
+                      video1.isVisible && "transition-transform scale-150 ml-4"
                     )}
                   >
                     <span className="text-secondary font-semibold">
@@ -168,7 +135,7 @@ export default function HomePage() {
                   <p
                     className={cn(
                       "my-3",
-                      video2IsVisible && "transition-transform scale-150 ml-4"
+                      video2.isVisible && "transition-transform scale-150 ml-4"
                     )}
                   >
                     <span className="text-secondary font-semibold">Salsa</span>,
@@ -176,7 +143,7 @@ export default function HomePage() {
                   </p>
                   <p
                     className={cn(
-                      video3IsVisible && "transition-transform scale-150 ml-4"
+                      video3.isVisible && "transition-transform scale-150 ml-4"
                     )}
                   >
                     <span className="text-secondary font-semibold">
@@ -196,7 +163,7 @@ export default function HomePage() {
               </div>
               <div className="hidden md:block">
                 <div
-                  ref={video1Ref}
+                  ref={video1.ref}
                   className="h-fit z-60 flex justify-center items-start animate-scale-on-scroll"
                 >
                   <VideoPlayer
@@ -207,7 +174,7 @@ export default function HomePage() {
                   />
                 </div>
                 <div
-                  ref={video2Ref}
+                  ref={video2.ref}
                   className="h-fit my-5 flex justify-center items-center animate-scale-on-scroll"
                 >
                   <VideoPlayer
@@ -218,7 +185,7 @@ export default function HomePage() {
                   />
                 </div>
                 <div
-                  ref={video3Ref}
+                  ref={video3.ref}
                   className="h-fit flex justify-center items-end animate-scale-on-scroll"
                 >
                   <VideoPlayer
